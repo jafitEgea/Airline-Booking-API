@@ -4,6 +4,7 @@ from sqlalchemy.orm import Session
 from . import models
 from . import schema
 from app.core import hashing
+from app.booking import models as booking_models
 
 async def get_all_users(db_session: Session) -> List[models.User]:
     users = db_session.query(models.User).all()
@@ -21,6 +22,14 @@ async def new_user_register(user_in: schema.UserCreate, db_session: Session) -> 
     return new_user
 
 async def delete_user_by_id(user_id: int, db_session: Session):
+    # NOTA: Para este método se decidió borrar también todas las reservas (bookings) 
+    # creadas por el usuario (User)
+    booking = db_session.query(booking_models.Booking).filter(booking_models.Booking.customer_id == user_id).all()
+    if booking:
+        for b in booking:
+            db_session.delete(b)
+
+    db_session.commit()
     db_session.query(models.User).filter(models.User.id == user_id).delete()
     db_session.commit()
 

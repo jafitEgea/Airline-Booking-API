@@ -1,4 +1,5 @@
 from fastapi import APIRouter, Depends, status, Response, HTTPException
+from fastapi.responses import PlainTextResponse
 from sqlalchemy.orm import Session
 from typing import List, Optional
 
@@ -44,7 +45,7 @@ async def get_bookings_by_status_and_customername(status: Optional[schema.Bookin
 
     return bookings
 
-@api_router.post("/booking/flight/{idflight}/user/{iduser}", status_code = status.HTTP_201_CREATED)
+@api_router.post("/booking/flight/{idflight}/user/{iduser}", status_code = status.HTTP_201_CREATED, response_model=schema.Booking)
 async def create_booking(idflight: int, iduser: int, booking_in: schema.BookingCreate, db_session: Session = Depends(db.get_db_session),
                          current_user: user_schema.User = Depends(security.get_current_user)):
     existingflight = await catalog_validation.verify_flight_exist(idflight, db_session)
@@ -62,11 +63,12 @@ async def create_booking(idflight: int, iduser: int, booking_in: schema.BookingC
     new_booking = await services.create_new_booking(idflight, iduser, booking_in, db_session)
     return new_booking
 
-@api_router.delete("/booking/{id}", status_code=status.HTTP_204_NO_CONTENT)
+@api_router.delete("/booking/{id}", status_code=status.HTTP_204_NO_CONTENT, response_class=PlainTextResponse)
 async def delete_booking(id: int, db_session: Session = Depends(db.get_db_session),
                          current_user: user_schema.User = Depends(security.get_current_user)):
     existingbooking = await services.get_booking_by_id(id, db_session)
     if not existingbooking:
         raise HTTPException(status_code=404, detail="Non-existent booking")
-    
-    return await services.delete_booking_by_id(id, db_session)
+    deleted_booking = await services.delete_booking_by_id(id, db_session)
+    return "The booking has been successfully deleted."
+     

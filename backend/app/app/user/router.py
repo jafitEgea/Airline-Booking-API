@@ -1,4 +1,5 @@
 from fastapi import APIRouter, Depends, status, Response, HTTPException
+from fastapi.responses import PlainTextResponse
 from sqlalchemy.orm import Session
 from typing import List
 
@@ -42,11 +43,11 @@ async def update_user(user_id: int, user_in: schema.UserUpdate, db_session: Sess
     new_user = await services.update_user(user_id, user_in, db_session)
     return new_user
 
-@api_router.delete('/user/{user_id}', status_code=status.HTTP_204_NO_CONTENT)
+@api_router.delete('/user/{user_id}', status_code=status.HTTP_200_OK, response_class=PlainTextResponse)
 async def delete_user_by_id(user_id: int, db_session: Session = Depends(db.get_db_session),
                             current_user: schema.User = Depends(security.get_current_user)):
     existinguser = await services.get_user_by_id(user_id, db_session)
     if not existinguser:
         raise HTTPException(status_code=404, detail = "Non-existent user")
-    
-    return await services.delete_user_by_id(user_id, db_session)
+    deleted_user = await services.delete_user_by_id(user_id, db_session)
+    return "THE USER AND ALL HIS BOOKINGS HAVE BEEN SUCCESSFULLY DELETED."

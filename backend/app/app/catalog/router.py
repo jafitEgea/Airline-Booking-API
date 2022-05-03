@@ -1,4 +1,5 @@
 from fastapi import APIRouter, Depends, status, Response, HTTPException
+from fastapi.responses import PlainTextResponse
 from sqlalchemy.orm import Session
 from typing import List, Optional
 from datetime import date
@@ -33,7 +34,7 @@ async def get_flights_by_airportcode_and_departuredate(airportCode: str, departu
 
     return flights
 
-@api_router.post("/catalog/", status_code = status.HTTP_201_CREATED)
+@api_router.post("/catalog/", status_code = status.HTTP_201_CREATED, response_model=schema.Flight)
 async def create_flight(flight_in: schema.FlightCreate, db_session: Session = Depends(db.get_db_session),
                         current_user: user_schema.User = Depends(security.get_current_user)):
     new_flight = await services.create_new_flight(flight_in, db_session = db_session)
@@ -49,11 +50,12 @@ async def update_flight(id: int, flight: schema.FlightUpdate, db_session: Sessio
     new_flight = await services.update_flight(id, flight, db_session)
     return new_flight
 
-@api_router.delete("/catalog/{id}", status_code=status.HTTP_204_NO_CONTENT)
+@api_router.delete("/catalog/{id}", status_code=status.HTTP_200_OK, response_class=PlainTextResponse)
 async def delete_flight(id: int, db_session: Session = Depends(db.get_db_session),
                         current_user: user_schema.User = Depends(security.get_current_user)):
     existingflight = await validation.verify_flight_exist(id, db_session)
     if not existingflight:
         raise HTTPException(status_code=404, detail="Non-existent flight")
-    
-    return await services.delete_flight(id, db_session)
+    await services.delete_flight(id, db_session)
+
+    return "THE FLIGHT AND ALL HIS BOOKINGS HAVE BEEN SUCCESSFULLY DELETED."

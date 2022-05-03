@@ -2,10 +2,12 @@ from typing import List
 from sqlalchemy.orm import Session
 from sqlalchemy import func
 from fastapi import HTTPException
+from datetime import date
 
 from . import models
 from . import schema
-from datetime import date
+from app.booking import models as booking_models
+
 
 async def get_all_flights(db_session: Session) -> List[models.Flight]:
     flights = db_session.query(models.Flight).all()
@@ -22,7 +24,8 @@ async def get_flights(departureAirportCode: str, arrivalAirportCode: str, depart
     flights = db_session.query(models.Flight).filter(models.Flight.departureAirportCode == departureAirportCode, 
                                                      models.Flight.arrivalAirportCode == arrivalAirportCode,
                                                      func.date(models.Flight.departureDate) == departureDate).all()
-    return flights  
+    return flights                                   # La función func extrate el date de un datetime. En este caso,
+                                                     # extrae el date de departureDate (datetime)
 
 async def get_flights_by_departureairportcode_and_departuredate(departureAirportCode: str, departureDate: date, db_session: Session) -> List[models.Flight]:
     dac = db_session.query(models.Flight).filter(models.Flight.departureAirportCode == departureAirportCode).all()
@@ -69,5 +72,12 @@ async def update_flight(flight_id: int, flight: schema.FlightUpdate, db_session:
     return updated_flight
 
 async def delete_flight(flight_id: int, db_session: Session):
+    # NOTA: Para este método se decidió borrar también todas las reservas (bookings) 
+    # del vuelo (flight)
+    booking = db_session.query(booking_models.Booking).filter(booking_models.Booking.outboundFlight_id == flight_id).all()
+    if booking:
+        for b in booking:
+            db_session.delete(b)
+    db_session.commit()
     db_session.query(models.Flight).filter(models.Flight.id == flight_id).delete()
     db_session.commit()
