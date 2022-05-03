@@ -24,8 +24,8 @@ async def get_flights(departureAirportCode: str, arrivalAirportCode: str, depart
     flights = db_session.query(models.Flight).filter(models.Flight.departureAirportCode == departureAirportCode, 
                                                      models.Flight.arrivalAirportCode == arrivalAirportCode,
                                                      func.date(models.Flight.departureDate) == departureDate).all()
-    return flights                                   # La función func extrate el date de un datetime. En este caso,
-                                                     # extrae el date de departureDate (datetime)
+    return flights                                   # La función func.date() extrae el date de un datetime.
+                                                     # En este caso, extrae el date de departureDate (datetime)
 
 async def get_flights_by_departureairportcode_and_departuredate(departureAirportCode: str, departureDate: date, db_session: Session) -> List[models.Flight]:
     dac = db_session.query(models.Flight).filter(models.Flight.departureAirportCode == departureAirportCode).all()
