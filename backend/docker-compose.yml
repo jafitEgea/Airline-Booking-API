@@ -1,0 +1,24 @@
+version: '3.8'
+services:
+  db:
+    container_name: db
+    hostname: db
+    image: postgres:alpine
+    restart: always
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_DB=airport_db
+      - POSTGRES_PASSWORD=123123
+    ports:
+      - 5434:5432
+  app:
+    container_name: app-airline
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - 80:80
+    environment:
+      - DATABASE_URI=postgresql://postgres:123123@db/airport_db
+    depends_on:
+      - db
