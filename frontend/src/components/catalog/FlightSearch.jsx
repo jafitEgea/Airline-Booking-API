@@ -1,10 +1,13 @@
-import React from 'react'
+import React, { useState } from 'react'
 import Container from '@mui/material/Container'
 import { Avatar, Box, Button, Grid, TextField, Typography } from '@mui/material'
 import FlightTakeoffIcon from '@mui/icons-material/FlightTakeoff';
 import FlightLandIcon from '@mui/icons-material/FlightLand';
 import InsertInvitationRoundedIcon from '@mui/icons-material/InsertInvitationRounded';
 import ArrowForwardIosRoundedIcon from '@mui/icons-material/ArrowForwardIosRounded';
+import { LocalizationProvider, MobileDatePicker } from '@mui/x-date-pickers';
+import {AdapterDateFns} from '@mui/x-date-pickers/AdapterDateFns';
+
 
 const FlightSearch = () => {
   const sxicons = { 'px':1, 'py':0.5, 'bgcolor':'#240046', 'boxShadow':1};
@@ -14,19 +17,22 @@ const FlightSearch = () => {
                 'backgroundSize':'250%', 'transition':'0.5s',
                 '&:hover': {'bgcolor':'#3C096C', 'backgroundPosition':'right'}};
 
-
+  const [date, setDate] = useState(new Date());
+  console.log(date);
+  const handleChange = (newDate) =>{setDate(newDate)};
   const handleSubmit = () => {}
+
 
   return (
     <div>
-      <Container maxWidth="sm">
+      <Container maxWidth="sm" sx={{border:1}}>
           <Box sx={{bgcolor:'#d2b7e5', borderRadius:4, boxShadow:4, mt:'3rem'}}>
               <Typography variant='h3' component='h3' sx={{textAlign:'center', py:'2rem', color:'#240046'}}>
                 Where next?
               </Typography>
               <Box component="form" noValidate onSubmit={handleSubmit}>
                 <Grid container>
-                  <Grid item direction='column' xs={2} sx={{display:'flex', justifyContent:'end', alignItems:'center'}}>
+                  <Grid item xs={2} sx={{display:'flex', justifyContent:'center', alignItems:'center'}}>
                     <Avatar variant="rounded" sx={sxicons}>
                       <FlightTakeoffIcon fontSize='large' sx={{color:'#E0AAFF'}}/>
                     </Avatar>
@@ -35,7 +41,7 @@ const FlightSearch = () => {
                     <TextField required color='secondary' size='small' variant='filled' label='Departure airport' sx={{width:'96%', boxShadow:1}} />
                   </Grid>
                   <Grid item xs={12} margin='1rem'/>
-                  <Grid item direction='column' xs={2} sx={{display:'flex', justifyContent:'end', alignItems:'center'}}>
+                  <Grid item xs={2} sx={{display:'flex', justifyContent:'center', alignItems:'center'}}>
                     <Avatar variant="rounded" sx={sxicons}>
                       <FlightLandIcon fontSize='large' sx={{color:'#E0AAFF'}}/>
                     </Avatar>
@@ -44,13 +50,23 @@ const FlightSearch = () => {
                     <TextField required color='secondary' size='small' variant='filled' label='Arrival airport' sx={{width:'96%', boxShadow:1}} />
                   </Grid>
                   <Grid item xs={12} margin='1rem'/>
-                  <Grid item direction='column' xs={2} sx={{display:'flex', justifyContent:'end', alignItems:'center'}}>
+                  <Grid item xs={2} sx={{display:'flex', justifyContent:'center', alignItems:'center'}}>
                     <Avatar variant="rounded" sx={sxicons}>
                       <InsertInvitationRoundedIcon fontSize='large' sx={{color:'#E0AAFF'}}/>
                     </Avatar>  
                   </Grid>
                   <Grid item xs={10}>
-                    <TextField required size='small' variant='filled' label='Departure airport' sx={{width:'96%'}} />
+                    <LocalizationProvider dateAdapter={AdapterDateFns}>
+                      <MobileDatePicker
+                        sx={{color:'#5A189A'}}
+                        label="Pick a date"
+                        //inputFormat="dd/MM/yyyy"
+                        inputFormat='EEEE, MMM d, yyyy'
+                        value={date}
+                        onChange={handleChange}
+                        renderInput={(params) => <TextField required size='small' variant='filled' color='secondary' {...params} sx={{width:'96%', boxShadow:1}}/>}
+                      />
+                    </LocalizationProvider>
                   </Grid>
                   <Grid item xs={12} margin='1rem'/>
                 </Grid>
