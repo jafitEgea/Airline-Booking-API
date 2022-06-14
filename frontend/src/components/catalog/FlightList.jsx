@@ -36,7 +36,7 @@ export default function FlightList(){
       useEffect(() => {
           async function fetchFlights(){
               try {
-                const response = await fetch("https://airline-app.azurewebsites.net/catalog/all");
+                const response = await fetch("https://fastapi-app.azurewebsites.net/catalog/all");
                 if(response.ok){
                   const flights = await response.json();
                   setFlightsList(flights);
@@ -50,7 +50,7 @@ export default function FlightList(){
 
       return ( <>
                     <Container maxWidth="md">
-                    <TableContainer component={Paper} sx={{mt:'3rem'}}>
+                    <TableContainer component={Paper} sx={{mt:'3rem', bgcolor:'#d2b7e5'}}>
                         <Table sx={{ minWidth: 650}} aria-label="simple table">
                             <TableHead>
                                 <TableRow>

@@ -25,8 +25,8 @@ const FlightSearch = () => {
 
   return (
     <div>
-      <Container maxWidth="sm" sx={{border:1}}>
-          <Box sx={{bgcolor:'#d2b7e5', borderRadius:4, boxShadow:4, mt:'3rem'}}>
+      <Container maxWidth="sm">
+          <Box sx={{bgcolor:'#d2b7e5', borderRadius:4, boxShadow:3, mt:'3rem'}}>
               <Typography variant='h3' component='h3' sx={{textAlign:'center', py:'2rem', color:'#240046'}}>
                 Where next?
               </Typography>
