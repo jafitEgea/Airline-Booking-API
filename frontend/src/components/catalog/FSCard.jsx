@@ -68,15 +68,13 @@ const FSCard = (props) => {
                       <Grid item xs={12}> <Divider variant="middle" /> </Grid>
 
                       <Grid item xs={3}>
-                        <Typography sx={{fontWeight:'bold', fontSize:14, textAlign:'center', color:'#5A189A'}}>
-                            {props.ticketCurrency} {props.ticketPrice}
-                        </Typography>
+                        <Typography sx={{fontWeight:'bold', fontSize:14, textAlign:'left', color:'#5A189A'}}>{props.ticketCurrency} {props.ticketPrice}</Typography>
                       </Grid>
 
                       <Grid item flexGrow={1}/>
 
-                      <Grid item xs={2}>
-                        <Typography sx={{fontWeight:'bold', fontSize:14, textAlign:"center", color:'#5A189A'}}>
+                      <Grid item xs={3}>
+                        <Typography sx={{fontWeight:'bold', fontSize:14, textAlign:"right", color:'#5A189A'}}>
                             Flight {props.flightNumber}
                         </Typography>
                       </Grid>

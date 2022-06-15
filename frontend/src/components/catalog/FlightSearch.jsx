@@ -22,10 +22,12 @@ const FlightSearch = (props) => {
   const [formData, setFormData] = useState(formDataInitial);
 
   const handleInputChange = ev => {
+      const mayus = ev.target.value.toUpperCase(); 
+      console.log(mayus);
       setFormData(
         {
         ...formData, 
-        [ev.target.name] : ev.target.value
+        [ev.target.name] : mayus
       });
   };
 
@@ -49,7 +51,8 @@ const FlightSearch = (props) => {
                     </Avatar>
                   </Grid>
                   <Grid item xs={10}>
-                    <TextField required onChange={handleInputChange} id="departureAirport" name="departureAirport"  color='secondary' size='small' variant='filled' label='Departure airport' sx={{width:'96%', boxShadow:1}} />
+                    <TextField required onChange={handleInputChange} id="departureAirport" name="departureAirport"  color='secondary' size='small' variant='filled' label='Departure airport' sx={{width:'96%', boxShadow:1}}
+                               inputProps={{style: { textTransform: "uppercase" }}} />
                   </Grid>
                   <Grid item xs={12} margin='1rem'/>
                   <Grid item xs={2} sx={{display:'flex', justifyContent:'center', alignItems:'center'}}>
@@ -58,7 +61,8 @@ const FlightSearch = (props) => {
                     </Avatar>
                   </Grid>
                   <Grid item xs={10}>
-                    <TextField required onChange={handleInputChange} id="arrivalAirport" name="arrivalAirport"  color='secondary' size='small' variant='filled' label='Arrival airport' sx={{width:'96%', boxShadow:1}} />
+                    <TextField required onChange={handleInputChange} id="arrivalAirport" name="arrivalAirport"  color='secondary' size='small' variant='filled' label='Arrival airport' sx={{width:'96%', boxShadow:1}} 
+                               inputProps={{ style: { textTransform: "uppercase" } }}/>
                   </Grid>
                   <Grid item xs={12} margin='1rem'/>
                   <Grid item xs={2} sx={{display:'flex', justifyContent:'center', alignItems:'center'}}>

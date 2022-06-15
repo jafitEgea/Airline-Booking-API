@@ -4,8 +4,8 @@ import './App.css';
 import FlightList from './components/catalog/FlightList';
 import FlightSearch from './components/catalog/FlightSearch';
 import FSResult from './components/catalog/FSResult';
-import Home from './components/catalog/Home';
-import PageNotFound from './components/catalog/PageNotFound';
+import Home from './components/pages/Home';
+import PageNotFound from './components/pages/PageNotFound';
 import NavBar from './components/NavBar';
 
 function App() {
@@ -26,9 +26,11 @@ function App() {
           console.log(flights);
           setResults(flights);
           navigate('/catalog/search');
+          }else{
+            alert("No Flights found")
           }
         } catch(error){
-          alert("No flights found")
+          alert("Request error")
         }
      }
     };
