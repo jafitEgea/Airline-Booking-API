@@ -13,9 +13,7 @@ function App() {
   const navigate = useNavigate();
 
   async function fetchFlightsSearch(departureAirport, arrivalAirport, departureDate){
-    console.log(departureAirport);
-    console.log(arrivalAirport);
-    console.log(departureDate);
+    
     if(departureAirport === '' && arrivalAirport === ''){
       alert("Please, fill in all fields.")
     } else {
