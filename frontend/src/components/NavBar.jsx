@@ -31,12 +31,12 @@ const NavBar = () => {
                 </Box>
                 <Box sx={{display:'inline-flex', flexGrow:1}}></Box>
                 <Box sx={{display:'inline-flex'}}>
-                    <Button variant='contained' sx={sxbutton} href="/catalog"   >
+                    <Button size='small' variant='contained' sx={sxbutton} href="/catalog"   >
                       Flights Search
                     </Button>
                 </Box>
                 <Box sx={{display:'inline-flex'}}>
-                    <Button variant='contained' sx={sxbutton} href="/catalog/all"   >
+                    <Button size='small' variant='contained' sx={sxbutton} href="/catalog/all"   >
                       All Flights
                     </Button>
                 </Box>

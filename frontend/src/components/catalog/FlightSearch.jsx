@@ -9,7 +9,7 @@ import { LocalizationProvider, MobileDatePicker } from '@mui/x-date-pickers';
 import {AdapterDateFns} from '@mui/x-date-pickers/AdapterDateFns';
 
 
-const FlightSearch = () => {
+const FlightSearch = (props) => {
   const sxicons = { 'px':1, 'py':0.5, 'bgcolor':'#240046', 'boxShadow':1};
   const sxbs = {'borderRadius':1.2,
                 'p':1.3, 'color': '#dac3e8',
@@ -17,11 +17,22 @@ const FlightSearch = () => {
                 'backgroundSize':'250%', 'transition':'0.5s',
                 '&:hover': {'bgcolor':'#3C096C', 'backgroundPosition':'right'}};
 
-  const [date, setDate] = useState(new Date());
-  console.log(date);
-  const handleChange = (newDate) =>{setDate(newDate)};
-  const handleSubmit = () => {}
+  const formDataInitial= {departureAirport : '', 
+                          arrivalAirport : ''};
+  const [formData, setFormData] = useState(formDataInitial);
 
+  const handleInputChange = ev => {
+      setFormData(
+        {
+        ...formData, 
+        [ev.target.name] : ev.target.value
+      });
+  };
+
+  const [date, setDate] = useState(new Date());
+  const onlydate = date.toISOString().substring(0,10);
+
+  const handleChange = (newDate) =>{setDate(newDate)};
 
   return (
     <div>
@@ -30,7 +41,7 @@ const FlightSearch = () => {
               <Typography variant='h3' component='h3' sx={{textAlign:'center', py:'2rem', color:'#240046'}}>
                 Where next?
               </Typography>
-              <Box component="form" noValidate onSubmit={handleSubmit}>
+              <Box>
                 <Grid container>
                   <Grid item xs={2} sx={{display:'flex', justifyContent:'center', alignItems:'center'}}>
                     <Avatar variant="rounded" sx={sxicons}>
@@ -38,7 +49,7 @@ const FlightSearch = () => {
                     </Avatar>
                   </Grid>
                   <Grid item xs={10}>
-                    <TextField required color='secondary' size='small' variant='filled' label='Departure airport' sx={{width:'96%', boxShadow:1}} />
+                    <TextField required onChange={handleInputChange} id="departureAirport" name="departureAirport"  color='secondary' size='small' variant='filled' label='Departure airport' sx={{width:'96%', boxShadow:1}} />
                   </Grid>
                   <Grid item xs={12} margin='1rem'/>
                   <Grid item xs={2} sx={{display:'flex', justifyContent:'center', alignItems:'center'}}>
@@ -47,7 +58,7 @@ const FlightSearch = () => {
                     </Avatar>
                   </Grid>
                   <Grid item xs={10}>
-                    <TextField required color='secondary' size='small' variant='filled' label='Arrival airport' sx={{width:'96%', boxShadow:1}} />
+                    <TextField required onChange={handleInputChange} id="arrivalAirport" name="arrivalAirport"  color='secondary' size='small' variant='filled' label='Arrival airport' sx={{width:'96%', boxShadow:1}} />
                   </Grid>
                   <Grid item xs={12} margin='1rem'/>
                   <Grid item xs={2} sx={{display:'flex', justifyContent:'center', alignItems:'center'}}>
@@ -71,7 +82,8 @@ const FlightSearch = () => {
                   <Grid item xs={12} margin='1rem'/>
                 </Grid>
                 <Box maxWidth='sm' sx={{display:'flex', justifyContent:'center', py:3, pb:5}}>
-                  <Button variant='contained' endIcon={<ArrowForwardIosRoundedIcon />} href="/catalog/search" sx={sxbs}>SEARCH FLIGHTS</Button>
+                  <Button variant='contained' sx={sxbs} endIcon={<ArrowForwardIosRoundedIcon />} 
+                          onClick={() => {props.fetchFlightsSearch(formData.departureAirport,formData.arrivalAirport,onlydate)}}>SEARCH FLIGHTS</Button>
                 </Box>
                 
               </Box>
